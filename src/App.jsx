@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddTask from "./components/AddTask";
 import Task from "./components/Tasks";
+import { v4 } from "uuid";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -40,8 +41,19 @@ function App() {
   }
 
   function onDeleteTaskClick(taskId) {
-    const newTask = tasks.filter(task => task.id !== taskId);
+    const newTask = tasks.filter((task) => task.id !== taskId);
     setTasks(newTask);
+  }
+
+  function onAddTaskSubmit(title, description) {
+    const newTask = {
+      id: v4(),
+      title,
+      description,
+      isCompleted: false,
+    };
+    setTasks([...tasks, newTask]);
+    console.log(tasks);
   }
 
   return (
@@ -50,8 +62,12 @@ function App() {
         <h1 className="text-3xl text-slate-100 font-bold text-center">
           Gerenciador de Tarefas
         </h1>
-        <AddTask />
-        <Task tasks={tasks} onTaskClick={onTaskClick} onDeleteTaskClick={onDeleteTaskClick}/>
+        <AddTask onAddTaskSubmit={onAddTaskSubmit} />
+        <Task
+          tasks={tasks}
+          onTaskClick={onTaskClick}
+          onDeleteTaskClick={onDeleteTaskClick}
+        />
       </div>
     </div>
   );
